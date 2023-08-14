@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Display</title>
+</head>
+<body>
+    <h1>Image Display</h1>
+    <table>
+        <tr>
+            <th>Image</th>
+            <th>Loading Time</th>
+            <th>File Name</th>
+        </tr>
+        {% for data in image_info %}
+        <tr>
+            <td><img src="data:image/jpeg;base64,{{ data.image_base64 }}" alt="Image" width="200"></td>
+            <td>{{ data.loading_time }} seconds</td>
+            <td>{{ data.filename }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
+
+
+

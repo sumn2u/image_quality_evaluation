@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Upload</title>
+</head>
+<body>
+    <h1>Image Comparison</h1>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload">
+    </form>
+    <h2>Results:</h2>
+    <div>
+        {% if mse_results %}
+        <h3>MSE Results:</h3>
+        <ul>
+            {% for format, mse_values in mse_results.items() %}
+            <li>Format: {{ format }} - MSE: {{ mse_values }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if psnr_results %}
+        <h3>PSNR Results:</h3>
+        <ul>
+            {% for format, psnr_values in psnr_results.items() %}
+            <li>Format: {{ format }} - PSNR: {{ psnr_values }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% if ssim_results %}
+        <h3>SSIM Results:</h3>
+        <ul>
+            {% for format, ssim_values in ssim_results.items() %}
+            <li>Format: {{ format }} - SSIM: {{ ssim_values }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <!-- Add similar sections for PSNR and SSIM results -->
+    </div>
+
+     <a href="{{ url_for('display_images') }}">View Image Loading Times</a>
+</body>
+</html>
+
+
+
