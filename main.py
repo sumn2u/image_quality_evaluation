@@ -71,13 +71,22 @@ def upload_file():
         raw_png_array = np.array(image)
 
         # Process the results or return them in a response
-        mse_results, psnr_results, ssim_results, encoding_times, decoding_times = evaluate_image_formats(
+        mse_results, psnr_results, ssim_results, encoding_times, decoding_times, compression_ratios = evaluate_image_formats(
             raw_png_array, image_name, temp_file_path)
 
         # Pass the evaluation results to the template
-        return render_template('upload.html', mse_results=mse_results, psnr_results=psnr_results, ssim_results=ssim_results, encoding_times=encoding_times, decoding_times=decoding_times)
+        return render_template('upload.html', mse_results=mse_results, psnr_results=psnr_results, ssim_results=ssim_results, encoding_times=encoding_times, decoding_times=decoding_times, compression_ratios=compression_ratios)
 
     return "No file uploaded."
+
+# Handle internal server errors using an error handler
+@app.errorhandler(500)
+def internal_server_error(e):
+    # Log the error
+    app.logger.error('Internal Server Error: %s', e)
+
+    # You can also return a custom error page if desired
+    return 'Internal Server Error', 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

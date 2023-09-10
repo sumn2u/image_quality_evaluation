@@ -64,6 +64,14 @@
         {% endfor %}
     </ul>
     {% endif %}
+    {% if compression_ratios %}
+    <h3>Compression Ratio:</h3>
+    <ul class="result-list">
+        {% for format, compression_ratio in compression_ratios.items() %}
+        <li>Format: {{ format }} - Compression Ratio: {{ compression_ratio }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 </div>
 
      <a href="{{ url_for('display_images') }}">View Image Loading Times</a>

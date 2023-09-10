@@ -7,7 +7,7 @@ import io as ioo
 from skimage import transform, color
 import os
 from pathlib import Path
-import avif
+# import avif
 from IPython.display import display
 import imageio
 import pillow_avif
@@ -149,6 +149,12 @@ def convert_to_heif(image, image_name, image_path):
     decoding_time = time.time() - start_time
     return heif_bytes, img, encoding_time, decoding_time
 
+# Function to calculate the compression ratio
+def calculate_compression_ratio(original_image,  compressed_image_bytes):
+    original_image_size = len(original_image.tobytes()) 
+    compressed_image_size = len(compressed_image_bytes)
+    compression_ratio = original_image_size / compressed_image_size
+    return compression_ratio
 
 def convert_to_numpy_array(image):
     """Converts a PIL image to a NumPy array."""
@@ -185,6 +191,7 @@ def evaluate_image_formats(image, image_name, image_path):
     ssim_results = {format: [] for format in formats}
     encoding_times = {format: [] for format in formats}
     decoding_times = {format: [] for format in formats}
+    compression_ratios = {format: [] for format in formats}
 
     for format in formats:
         if format == "JPEG":
@@ -198,6 +205,8 @@ def evaluate_image_formats(image, image_name, image_path):
             image_format = PILImage.open(image_jpeg_bytes)
             image_format = image_format.convert("RGB")  # Convert to RGB mode
             decoding_time = time.time() - start_time
+            compression_ratio = calculate_compression_ratio(
+                image, image_jpeg_bytes.getvalue())
 
         elif format == "WebP":
             start_time = time.time()
@@ -207,6 +216,8 @@ def evaluate_image_formats(image, image_name, image_path):
             start_time = time.time()
             image_format = PILImage.open(image_webp)
             decoding_time = time.time() - start_time
+            compression_ratio = calculate_compression_ratio(
+                image, image_webp.getvalue())
 
         elif format == "AVIF":
             start_time = time.time()
@@ -216,10 +227,14 @@ def evaluate_image_formats(image, image_name, image_path):
             start_time = time.time()
             image_format = PILImage.open(ioo.BytesIO(avif_bytes))
             decoding_time = time.time() - start_time
+            compression_ratio = calculate_compression_ratio(
+                image, avif_bytes)
 
         elif format == "HEIC":
             heic_bytes, image_format, encoding_time, decoding_time = convert_to_heif(
                 image, image_name, image_path)
+            compression_ratio = calculate_compression_ratio(
+                image, heic_bytes)
 
         image_format_array = convert_to_numpy_array(image_format)
         if image_format_array.shape[-1] == 3:
@@ -238,8 +253,8 @@ def evaluate_image_formats(image, image_name, image_path):
         ssim_results[format].append(ssim)
         encoding_times[format].append(encoding_time)
         decoding_times[format].append(decoding_time)
-
-    return mse_results, psnr_results, ssim_results, encoding_times, decoding_times
+        compression_ratios[format].append(compression_ratio)
+    return mse_results, psnr_results, ssim_results, encoding_times, decoding_times, compression_ratios
 
 
 def load_image_from_file(file_path):
