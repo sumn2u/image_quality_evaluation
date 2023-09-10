@@ -20,7 +20,7 @@ def open_and_get_image_info(filename):
     _, ext = os.path.splitext(filename)
     start_time = time.time()  # Record start time
     print(filename)
-    if ext.lower() == '.heic':
+    if ext.lower() == '.heif':
         heif_file = pillow_heif.open_heif(filename, convert_hdr_to_8bit=False)
         np_array = np.asarray(heif_file)
         img = PILImage.frombytes(
@@ -134,10 +134,10 @@ def convert_to_heif(image, image_name, image_path):
 
     img = PILImage.open(image_path)
     img.save(os.path.join(IMAGES_FOLDER,
-             f"{image_name}.heic"), quality=100, save_all=True)
+             f"{image_name}.heif"), quality=100, save_all=True)
     encoding_time = time.time() - start_time
 
-    heif_path = os.path.join(IMAGES_FOLDER, f"{image_name}.heic")
+    heif_path = os.path.join(IMAGES_FOLDER, f"{image_name}.heif")
 
     start_time = time.time()
     heif_file = pillow_heif.open_heif(heif_path, convert_hdr_to_8bit=False)
@@ -184,7 +184,7 @@ def resize_image(image, target_shape):
     return transform.resize(image, target_shape, mode='reflect', anti_aliasing=True)
 
 def evaluate_image_formats(image, image_name, image_path):
-    formats = ["JPEG", "WebP",  "HEIC", "AVIF"]
+    formats = ["JPEG", "WebP",  "HEIF", "AVIF"]
 
     mse_results = {format: [] for format in formats}
     psnr_results = {format: [] for format in formats}
@@ -230,11 +230,11 @@ def evaluate_image_formats(image, image_name, image_path):
             compression_ratio = calculate_compression_ratio(
                 image, avif_bytes)
 
-        elif format == "HEIC":
-            heic_bytes, image_format, encoding_time, decoding_time = convert_to_heif(
+        elif format == "HEIF":
+            heif_bytes, image_format, encoding_time, decoding_time = convert_to_heif(
                 image, image_name, image_path)
             compression_ratio = calculate_compression_ratio(
-                image, heic_bytes)
+                image, heif_bytes)
 
         image_format_array = convert_to_numpy_array(image_format)
         if image_format_array.shape[-1] == 3:

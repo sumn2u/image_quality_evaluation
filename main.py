@@ -21,7 +21,7 @@ all_files = os.listdir(folder_path)
 
 # Filter only image files
 image_filenames = [os.path.join(folder_path, filename) for filename in all_files if filename.lower(
-).endswith(('.png', '.avif', '.heic', '.webp'))]
+).endswith(('.png', '.avif', '.heif', '.webp'))]
 
 def is_valid_image(file_name):
     valid_extensions = ('.png', '.jpg', '.jpeg', '.gif')

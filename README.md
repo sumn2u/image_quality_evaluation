@@ -1,6 +1,6 @@
 ## TITLE
 
-Image Quality Evaluation of different image file formats (JPEG, WEBP, AVIF and HEIC)
+Image Quality Evaluation of different image file formats (JPEG, WEBP, AVIF and HEIFs)
 
 ## VERSION
 
@@ -47,12 +47,12 @@ Once completed, we can access the application by visiting <http://localhost:5000
 
 ## EXAMPLES OF USE
 
-We can upload the png image from file upload. It will then convert the file into `JPEG, WEBP, AVIF and HEIC` formats. From the output fomats it quality metrics such as `MSE, PSNR and SSIM` to compare the results. The loading time is also compared to render the image.
+We can upload the png image from file upload. It will then convert the file into `JPEG, WEBP, AVIF and HEIF` formats. From the output fomats it quality metrics such as `MSE, PSNR and SSIM` to compare the results. The loading time is also compared to render the image.
 
 One can use the cameraman.png attached in this project to test the results.
 
 > **Note**
-> HEIC image are not supported in most of the [browsers](https://caniuse.com/?search=heic) so one might see broken images for unsupported browser.
+> HEIF image are not supported in most of the [browsers](https://caniuse.com/?search=heif) so one might see broken images for unsupported browser.
 
 ## COPYRIGHT AND LICENSE INFORMATION
 
