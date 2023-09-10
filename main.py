@@ -71,11 +71,11 @@ def upload_file():
         raw_png_array = np.array(image)
 
         # Process the results or return them in a response
-        mse_results, psnr_results, ssim_results = evaluate_image_formats(
+        mse_results, psnr_results, ssim_results, encoding_times, decoding_times = evaluate_image_formats(
             raw_png_array, image_name, temp_file_path)
 
         # Pass the evaluation results to the template
-        return render_template('upload.html', mse_results=mse_results, psnr_results=psnr_results, ssim_results=ssim_results)
+        return render_template('upload.html', mse_results=mse_results, psnr_results=psnr_results, ssim_results=ssim_results, encoding_times=encoding_times, decoding_times=decoding_times)
 
     return "No file uploaded."
 

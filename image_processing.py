@@ -130,18 +130,24 @@ def find_folder_containing_subfolder(target_subfolder):
 def convert_to_heif(image, image_name, image_path):
     pillow_heif.register_heif_opener()
     IMAGES_FOLDER = "images"
+    start_time = time.time()
+
     img = PILImage.open(image_path)
     img.save(os.path.join(IMAGES_FOLDER,
              f"{image_name}.heic"), quality=100, save_all=True)
+    encoding_time = time.time() - start_time
+
     heif_path = os.path.join(IMAGES_FOLDER, f"{image_name}.heic")
+
+    start_time = time.time()
     heif_file = pillow_heif.open_heif(heif_path, convert_hdr_to_8bit=False)
     np_array = np.asarray(heif_file)
     img = PILImage.frombytes(heif_file.mode, heif_file.size,
                              np_array, "raw", heif_file.mode, heif_file.stride)
     heif_bytes = img.tobytes()
 
-    return heif_bytes, img
-    return heif_bytes, img
+    decoding_time = time.time() - start_time
+    return heif_bytes, img, encoding_time, decoding_time
 
 
 def convert_to_numpy_array(image):
@@ -171,33 +177,49 @@ def resize_image(image, target_shape):
     """Resizes the image to the target shape using bilinear interpolation."""
     return transform.resize(image, target_shape, mode='reflect', anti_aliasing=True)
 
-
 def evaluate_image_formats(image, image_name, image_path):
     formats = ["JPEG", "WebP",  "HEIC", "AVIF"]
-    # formats = ["AVIF"]
 
     mse_results = {format: [] for format in formats}
     psnr_results = {format: [] for format in formats}
     ssim_results = {format: [] for format in formats}
+    encoding_times = {format: [] for format in formats}
+    decoding_times = {format: [] for format in formats}
 
     for format in formats:
         if format == "JPEG":
+            start_time = time.time()
             image_jpeg = PILImage.fromarray(np.uint8(image))
             image_jpeg_bytes = ioo.BytesIO()
             image_jpeg.save(image_jpeg_bytes, format="jpeg")
+            encoding_time = time.time() - start_time
+
+            start_time = time.time()
             image_format = PILImage.open(image_jpeg_bytes)
             image_format = image_format.convert("RGB")  # Convert to RGB mode
+            decoding_time = time.time() - start_time
 
         elif format == "WebP":
+            start_time = time.time()
             image_webp = convert_to_webp(image, image_name)
+            encoding_time = time.time() - start_time
+
+            start_time = time.time()
             image_format = PILImage.open(image_webp)
+            decoding_time = time.time() - start_time
 
         elif format == "AVIF":
+            start_time = time.time()
             avif_bytes = convert_to_avif(image, image_name)
+            encoding_time = time.time() - start_time
+
+            start_time = time.time()
             image_format = PILImage.open(ioo.BytesIO(avif_bytes))
+            decoding_time = time.time() - start_time
 
         elif format == "HEIC":
-            heic_bytes, image_format = convert_to_heif(image, image_name, image_path)
+            heic_bytes, image_format, encoding_time, decoding_time = convert_to_heif(
+                image, image_name, image_path)
 
         image_format_array = convert_to_numpy_array(image_format)
         if image_format_array.shape[-1] == 3:
@@ -214,8 +236,10 @@ def evaluate_image_formats(image, image_name, image_path):
         mse_results[format].append(mse)
         psnr_results[format].append(psnr)
         ssim_results[format].append(ssim)
+        encoding_times[format].append(encoding_time)
+        decoding_times[format].append(decoding_time)
 
-    return mse_results, psnr_results, ssim_results
+    return mse_results, psnr_results, ssim_results, encoding_times, decoding_times
 
 
 def load_image_from_file(file_path):

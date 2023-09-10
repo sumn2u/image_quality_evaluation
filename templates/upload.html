@@ -2,6 +2,18 @@
 <html>
 <head>
     <title>File Upload</title>
+    <style>
+    .result-list {
+        list-style-type: none;
+        padding: 0;
+        display: inline-block;
+    }
+
+    .result-list li {
+        display: inline-block;
+        margin-right: 10px; /* Adjust the spacing between list items as needed */
+    }
+</style>
 </head>
 <body>
     <h1>Image Comparison</h1>
@@ -11,34 +23,48 @@
     </form>
     <h2>Results:</h2>
     <div>
-        {% if mse_results %}
-        <h3>MSE Results:</h3>
-        <ul>
-            {% for format, mse_values in mse_results.items() %}
-            <li>Format: {{ format }} - MSE: {{ mse_values }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+    {% if mse_results %}
+    <h3>MSE Results:</h3>
+    <ul class="result-list">
+        {% for format, mse_values in mse_results.items() %}
+        <li>Format: {{ format }} - MSE: {{ mse_values }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 
-        {% if psnr_results %}
-        <h3>PSNR Results:</h3>
-        <ul>
-            {% for format, psnr_values in psnr_results.items() %}
-            <li>Format: {{ format }} - PSNR: {{ psnr_values }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% if ssim_results %}
-        <h3>SSIM Results:</h3>
-        <ul>
-            {% for format, ssim_values in ssim_results.items() %}
-            <li>Format: {{ format }} - SSIM: {{ ssim_values }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-
-        <!-- Add similar sections for PSNR and SSIM results -->
-    </div>
+    {% if psnr_results %}
+    <h3>PSNR Results:</h3>
+    <ul class="result-list">
+        {% for format, psnr_values in psnr_results.items() %}
+        <li>Format: {{ format }} - PSNR: {{ psnr_values }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% if ssim_results %}
+    <h3>SSIM Results:</h3>
+    <ul class="result-list">
+        {% for format, ssim_values in ssim_results.items() %}
+        <li>Format: {{ format }} - SSIM: {{ ssim_values }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% if encoding_times %}
+    <h3>Encoding Times:</h3>
+    <ul class="result-list">
+        {% for format, encoding_time in encoding_times.items() %}
+        <li>Format: {{ format }} - Encoding Time: {{ encoding_time }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% if decoding_times %}
+    <h3>Decoding Times:</h3>
+    <ul class="result-list">
+        {% for format, decoding_time in decoding_times.items() %}
+        <li>Format: {{ format }} - Decoding Time: {{ decoding_time }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>
 
      <a href="{{ url_for('display_images') }}">View Image Loading Times</a>
 </body>
