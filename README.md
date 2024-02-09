@@ -1,4 +1,5 @@
-## TITLE
+## Image Quality Evaluation (JPEG, WEBP, AVIF and HEIFs)
+[![Build and publish Docker image](https://github.com/sumn2u/image_quality_evaluation/actions/workflows/main.yml/badge.svg)](https://github.com/sumn2u/image_quality_evaluation/actions/workflows/main.yml)
 
 Image Quality Evaluation of different image file formats (JPEG, WEBP, AVIF and HEIFs)
 
