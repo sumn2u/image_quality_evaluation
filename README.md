@@ -9,7 +9,15 @@ Image Quality Evaluation of different image file formats (JPEG, WEBP, AVIF and H
 
 ## AUTHOR
 
-Suman Kunwar <sumn2u@gmail.com>
+Suman Kunwar <suman@dwaste.live>
+
+## DATASETS
+
+- CBSD68: contains 68 images in bmp format (colored) 
+- Kodak24: 24 images, colored png format, various sizes
+- McM: 18 images in tif format (colored) 
+- Set12: 12 images png fromat (lena discontiued)
+- Set68: 68 images png (8-bit grayscale BMP) fix on 
 
 ## CONTENTS
 
